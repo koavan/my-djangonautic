@@ -37,8 +37,6 @@ services:
         command: sh -c "sleep 20 && pip3 install -r requirements.txt && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         ports:
             - "8008:8000"
-        deploy:
-            replicas: 2
         networks:
             main:
                 aliases:
