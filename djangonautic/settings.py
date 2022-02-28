@@ -25,7 +25,7 @@ SECRET_KEY = 'g*m)_fy5!11c!r7wfb-_jf=q+$hyh63#z2q^0odffd8ehlj!h)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['blogbuster.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
