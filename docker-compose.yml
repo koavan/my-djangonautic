@@ -1,0 +1,49 @@
+version: '3'
+
+services: 
+    postgres-db:
+        image: postgres:9.6
+        container_name: postgres-db
+        ports: 
+            - "1234:5432"
+        environment:
+            - POSTGRES_DB=djangonautic
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres123
+        volumes:
+            - ~/djangonautic/postgres-data:/var/lib/postgresql/data
+        networks: 
+            main:
+                aliases: 
+                    - postgres-db
+        tty: true
+        stdin_open: true
+    djangonautic-server:
+        image: koavan/djangoserver:version-1.3
+        container_name: djangonautic-server
+        environment: 
+            - ENV=development
+            - DATABASE_HOST=postgres-db
+            - DATABASE_NAME=djangonautic
+            - DATABASE_USER=postgres
+            - DATABASE_PASSWORD=postgres123
+            - DATABASE_PORT=5432
+            - CORS_ALLOWED_SITES=http://localhost:3000,http://127.0.0.1:3000
+        volumes:
+            - .:/src
+        working_dir: /src
+        depends_on:
+            - postgres-db
+        command: sh -c "sleep 20 && pip3 install -r requirements.txt && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        ports:
+            - "8008:8000"
+        deploy:
+            replicas: 2
+        networks:
+            main:
+                aliases:
+                    - djangonautic-server
+        tty: true
+        stdin_open: true
+networks: 
+    main:
